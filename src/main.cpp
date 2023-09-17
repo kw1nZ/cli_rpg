@@ -10,53 +10,6 @@
 
 
 // printers
-void printMainMenu();
-
-void printRaceMenu();
-
-void printAll(const std::vector<Player *> &playerLst);
-
-
-Player *createPlayer(const std::string &name, int typeNum, int raceNum);
-
-void doCleanup(std::vector<Player *> playerLst);
-
-Race getRace(int raceNum);
-
-
-int main() {
-    printMainMenu();
-
-    std::vector<Player *> playerLst;
-    int choice;
-    std::cin >> choice;
-    std::cin.get(); // consume new line
-
-    std::string name;
-    int raceNum;
-    while (choice != 0) {
-        std::cout << "\nWhat would you like to name your character?\n-> ";
-        std::getline(std::cin, name);
-
-        printRaceMenu();
-        std::cin >> raceNum;
-        std::cin.get();
-
-        Player *tempPlayer = createPlayer(name, choice, raceNum);
-        playerLst.push_back(tempPlayer);
-
-        printMainMenu();
-        std::cin >> choice;
-        std::cin.get();
-    }
-
-    printAll(playerLst);
-    doCleanup(playerLst);
-
-    return 0;
-}
-
-
 void printMainMenu() {
     std::cout << "\nWhich of the following would you like?\n"
                  "\t1 - Create a Warrior\n"
@@ -76,9 +29,9 @@ void printRaceMenu() {
                  "-> ";
 }
 
-void printAll(const std::vector<Player *> &playerLst) {
+void printAllPlayers(const std::vector<Player *> &players) {
     std::cout << "\nPLAYER LIST:\n";
-    for (Player *player: playerLst) {
+    for (Player *player: players) {
         const std::string name = "NAME: " + player->getName();
         const std::string race = "RACE: " + enumString(player->getRace());
         const std::string attack = "ATTACK: " + player->attack();
@@ -89,23 +42,8 @@ void printAll(const std::vector<Player *> &playerLst) {
                 << name
                 << std::setw(18)
                 << race
-                << attack;
-
-        std::cout << '\n';
-    }
-}
-
-
-Player *createPlayer(const std::string &name, const int typeNum, const int raceNum) {
-    Race race = getRace(raceNum);
-
-    switch (typeNum) {
-        case 1:
-            return new Warrior(name, race);
-        case 2:
-            return new Priest(name, race);
-        case 3:
-            return new Mage(name, race);
+                << attack
+                << '\n';
     }
 }
 
@@ -124,7 +62,60 @@ Race getRace(const int raceNum) {
     }
 }
 
+Player *createPlayer(const std::string &name, const int typeNum, const int raceNum) {
+    Race race = getRace(raceNum);
+
+    switch (typeNum) {
+        case 1:
+            return new Warrior(name, race);
+        case 2:
+            return new Priest(name, race);
+        case 3:
+            return new Mage(name, race);
+    }
+}
+
 void doCleanup(std::vector<Player *> playerLst) {
     for (Player *player: playerLst) delete player;
     playerLst.clear();
 }
+
+
+int main() {
+    printMainMenu();
+
+    std::vector<Player *> players;
+    int typeNum;
+    std::cin >> typeNum;
+    std::cin.get(); // consume new line
+
+    std::string name;
+    int raceNum;
+    while (typeNum != 0) {
+        std::cout << "\nWhat would you like to name your character?\n-> ";
+        std::getline(std::cin, name);
+
+        printRaceMenu();
+        std::cin >> raceNum;
+        std::cin.get();
+
+        players.push_back(createPlayer(name, typeNum, raceNum));
+
+        printMainMenu();
+        std::cin >> typeNum;
+        std::cin.get();
+    }
+
+    printAllPlayers(players);
+    doCleanup(players);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
