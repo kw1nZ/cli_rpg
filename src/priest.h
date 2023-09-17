@@ -4,11 +4,11 @@
 
 #include "player.h"
 
-class Priest: public Player {
+class Priest : public Player {
 public:
-  Priest(std::string name, Race race): Player(std::move(name), race, 100, 200) {}
+    Priest(std::string name, Race race) : Player(std::move(name), race, 100, 200) {}
 
-  [[nodiscard]] std::string attack() const override {
-    return "I\'ll assault you with Holy Crap!";
-  }
+    [[nodiscard]] std::string attack() const override {
+        return "Attack of Priest";
+    }
 };

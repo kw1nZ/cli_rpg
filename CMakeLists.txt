@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(${PROJECT_NAME}
         src/mage.h
         src/main.cpp
-        src/player.cpp
         src/player.h
         src/priest.h
-        src/warrior.h)
+        src/warrior.h
+)
